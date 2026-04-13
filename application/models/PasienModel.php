@@ -73,6 +73,10 @@ class PasienModel extends CI_Model {
     {
         return $this->getDataPasien($bln)->num_rows();
     }
+    public function getDaftarPasien($params)
+    {
+        return $this->db->query("CALL laporan.LaporanDaftarPasienDiagnosa('".$params['tgl_awal']."', '".$params['tgl_akhir']."', '".$params['ruangan']."', 0, 0)")->result();
+    }
     public function getJmlPasienHariIni()
     {
         return $this->db->query("
@@ -105,7 +109,7 @@ class PasienModel extends CI_Model {
             r.ID = 101020101
             OR 
                 r.ID = 101010104
-            AND pp.TANGGAL = ".date("Y-m-d")."
+            AND pp.TANGGAL = '".date("Y-m-d")."'
         GROUP BY md.DIAGNOSA
         LIMIT 20
         ")->num_rows();

@@ -1,60 +1,9 @@
 <!-- DataTables -->
 <link rel="stylesheet" href="<?= base_url() ?>assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 <div class="row">
-    <div class="col-md-4 col-sm-6 col-xs-12">
-        <div class="info-box">
-            <span class="info-box-icon bg-green"><i class="fa fa-user"></i></span>
-
-            <div class="info-box-content">
-                <span class="info-box-text">Jumlah Pasien Hari Ini</span>
-                <span class="info-box-number"><?= $pasienhrini ?></span>
-            </div>
-            <!-- /.info-box-content -->
-        </div>
-        <!-- /.info-box -->
-    </div>
-    <!-- /.col -->
-    <div class="col-md-4 col-sm-6 col-xs-12">
-        <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
-
-            <div class="info-box-content">
-                <span class="info-box-text">Jumlah Pasien Bulan Ini</span>
-                <span class="info-box-number"><?= $pasien ?></span>
-            </div>
-            <!-- /.info-box-content -->
-        </div>
-        <!-- /.info-box -->
-    </div>
-    <!-- /.col -->
-     <div class="col-md-4 col-sm-6 col-xs-12">
-        <div class="info-box">
-            <span class="info-box-icon bg-yellow"><i class="ion ion-ios-gear-outline"></i></span>
-
-            <div class="info-box-content">
-                <span class="info-box-text">Diagnosa Bulan Ini</span>
-                <span class="info-box-number"><?= $blnini ?></span>
-            </div>
-            <!-- /.info-box-content -->
-        </div>
-        <!-- /.info-box -->
-    </div>
-    <!-- /.col -->
-    <div class="col-md-8">
-        <div class="box box-success">
-            <div class="box-header">
-                <i class="fa fa-info"></i>&nbsp;<h3 class="box-title">10 Penyakit Anak</h3>
-            </div>
-            <div class="box-body">
-                <div class="chart">
-                    <canvas id="barChart" style="height:230px"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="col-md-4">
-        <!-- Info Boxes Style 2 -->
-          <div class="info-box bg-yellow">
+         <!-- Info Boxes Style 2 -->
+          <div class="info-box bg-green">
             <span class="info-box-icon"><i class="ion ion-ios-pricetag-outline"></i></span>
 
             <div class="info-box-content">
@@ -70,24 +19,28 @@
             </div>
             <!-- /.info-box-content -->
           </div>
+       </div>
+        <div class="col-md-4">
           <!-- /.info-box -->
-          <div class="info-box bg-green">
+          <div class="info-box bg-yellow">
             <span class="info-box-icon"><i class="ion ion-ios-heart-outline"></i></span>
 
             <div class="info-box-content">
               <span class="info-box-text">Status Gizi Buruk</span>
-              <span class="info-box-number">NaN</span>
+              <span class="info-box-number"><?= $gizi_buruk ?></span>
 
               <div class="progress">
                 <div class="progress-bar" style="width: 20%"></div>
               </div>
               <span class="progress-description">
-                    20% Increase in 30 Days
-                  </span>
+                Status Gizi Buruk
+              </span>
             </div>
             <!-- /.info-box-content -->
           </div>
           <!-- /.info-box -->
+        </div>
+        <div class="col-md-4">
           <div class="info-box bg-red">
             <span class="info-box-icon"><i class="ion ion-ios-cloud-download-outline"></i></span>
 
@@ -104,15 +57,61 @@
             </div>
             <!-- /.info-box-content -->
           </div>
-    </div>  
+        </div>
     <div class="col-md-12">
       <div class="box box-success">
         <div class="box-header">
-            <i class="fa fa-info"></i>&nbsp;<h3 class="box-title">10 Penyakit Anak Bln Ini</h3>
+            <i class="fa fa-info"></i>&nbsp;<h3 class="box-title">Informasi Diagnosa</h3>
+            
         </div>
         <div class="box-body">
+            <div class="modal fade" id="modal-default">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Sorting Bulan</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form method="post" id="search-form" action="<?= base_url() ?>main/dashboard/search" class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="">Tanggal Awal</label>
+                          <input type="date" placeholder="Masukan Tgl Awal" name="tgl_awal" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="">Tanggal Akhir</label>
+                          <input type="date" placeholder="Masukan Tgl Akhir" name="tgl_akhir" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="">Ruangan</label>
+                          <select name="ruangan" id="" class="form-control">
+                            <option value="">PILIH RUANGAN</option>
+                            <?php foreach ($ruangan as $key) { ?>
+                              <option value="<?= $key->ID ?>"><?= $key->DESKRIPSI ?></option>
+                            <?php } ?>
+                          </select>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
+                    <button type="submit" form="search-form" class="btn btn-success"><i class="fa fa-sort"></i>Cari</button>
+                  </div>
+                </div>
+                <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
           <table id="example2" class="table table-bordered table-hover">
-                <thead>
+              <thead>
                 <tr>
                   <th>No RM</th>
                   <th>Nama</th>
@@ -125,20 +124,20 @@
                 </thead>
                 <tbody>
                   <?php
-                  foreach ($pasien_result as $key) { ?>
+                  foreach ($daftar_pasien as $key) { ?>
                 <tr>
                   <td><?= $key->NORM ?></td>
-                  <td><?= $key->NAMA ?></td>
-                  <td><?= $key->DESKRIPSI ?></td>
+                  <td><?= $key->NAMALENGKAP ?></td>
+                  <td><?= $key->INSTALASI ?></td>
                   <td><?= $key->DIAGNOSA ?></td>
                   <td><?= $key->TBU ?></td>
                   <td><?= $key->BBU ?></td>
                   <td>
-                    Kategori TBU = <span class="badge badge-success"><?= $key->KATEGORI_TBU ?></span>
+                    Kategori TBU = <span class="label bg-green"><?= $key->KATEGORI_TBU ?></span>
                     <br>
-                    Kategori BBU = <span class="badge badge-success"><?= $key->KATEGORI_BBU ?></span>
+                    Kategori BBU = <span class="label bg-blue"><?= $key->KATEGORI_BBU ?></span>
                     <br>
-                    Kategori BBU = <span class="badge badge-success"><?= $key->KATEGORI_IMTU ?></span>
+                    Kategori BBU = <span class="label bg-purple"><?= $key->KATEGORI_IMTU ?></span>
                   </td>
                 </tr>
                 <?php } ?>
